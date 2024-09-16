@@ -19,7 +19,7 @@ public class Trip {
         }
     }
 
-    public static int calculateNumberOfBoats(int limit, int[] weights) {
+    public static int calculateNumberOfBoatsCrude(int limit, int[] weights) {
         boolean[] boarded = new boolean[weights.length];
         int filledWeight, boardedNumber = 0, boatsNumber = 0;
         sort(weights);
@@ -32,6 +32,38 @@ public class Trip {
                 filledWeight += weights[i];
                 boarded[i] = true;
                 boardedNumber++;
+            }
+            boatsNumber++;
+        }
+        return boatsNumber;
+    }
+
+    public static int max(int a, int b) {
+        return a > b ? a : b;
+    }
+
+    public static int calculateNumberOfBoats(int limit, int[] weights) {
+        boolean[] boarded = new boolean[weights.length];
+        int[][] maxWeight = new int[weights.length + 1][limit + 1];
+        int boardedNumber = 0, boatsNumber = 0;
+        sort(weights);
+        Arrays.fill(boarded, false);
+        for (int i = 0; i < limit; i++) {
+            maxWeight[0][i] = 0;
+        }
+        while (boardedNumber < weights.length) {
+            for (int i = 0; i < weights.length; i++) {
+                for (int j = 1; j <= limit; j++) {
+                    if (weights[i] > j || boarded[i])
+                        maxWeight[i + 1][j] = maxWeight[i][j];
+                    else {
+                        maxWeight[i + 1][j] = max(maxWeight[i][j], maxWeight[i][j - weights[i]] + weights[i]);
+                        if ((maxWeight[i][j - weights[i]] + weights[i]) > maxWeight[i][j]) {
+                            boarded[i] = true;
+                            boardedNumber++;
+                        }
+                    }
+                }
             }
             boatsNumber++;
         }
@@ -58,7 +90,7 @@ public class Trip {
             System.out.println(ex.getMessage());
         }
 
-        result = calculateNumberOfBoats(weightLimit, weights);
+        result = calculateNumberOfBoatsCrude(weightLimit, weights);
 
         try(FileWriter output = new FileWriter("output.txt")) {
             output.write(String.valueOf(result));
