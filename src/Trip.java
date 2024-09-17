@@ -88,6 +88,27 @@ public class Trip {
         return boatsNumber;
     }
 
+    public static int calculateNumberOfKayaks(int limit, int[] weights) {
+        int numberOfKayaks = 0;
+        boolean[] boarded = new boolean[weights.length];
+        Arrays.fill(boarded, false);
+        for (int i = weights.length - 1; i >= 0; i--) {
+            if (boarded[i])
+                continue;
+            for (int j = i - 1; j >= 0; j--) {
+                if (!boarded[j] && (weights[i] + weights[j] < limit)) {
+                    boarded[i] = true;
+                    boarded[j] = true;
+                    numberOfKayaks++;
+                    break;
+                }
+            }
+            if (!boarded[i])
+                numberOfKayaks++;
+        }
+        return numberOfKayaks;
+    }
+
     public static void main(String[] args) {
         int numberOfPeople, weightLimit = 0, result;
         int[] weights = null;
@@ -108,7 +129,7 @@ public class Trip {
             System.out.println(ex.getMessage());
         }
 
-        result = calculateNumberOfBoats(weightLimit, weights);
+        result = calculateNumberOfKayaks(weightLimit, weights);
 
         try(FileWriter output = new FileWriter("output.txt")) {
             output.write(String.valueOf(result));
