@@ -90,6 +90,7 @@ public class Trip {
     public static int calculateNumberOfKayaks(int limit, int[] weights) {
         int numberOfKayaks = 0;
         boolean[] boarded = new boolean[weights.length];
+        sort(weights);
         Arrays.fill(boarded, false);
         for (int i = weights.length - 1; i >= 0; i--) {
             if (boarded[i])
