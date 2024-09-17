@@ -2,7 +2,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Trip {
 
@@ -44,27 +47,42 @@ public class Trip {
 
     public static int calculateNumberOfBoats(int limit, int[] weights) {
         boolean[] boarded = new boolean[weights.length];
+        List<Integer>[][] board = new List[weights.length + 1][limit + 1];
         int[][] maxWeight = new int[weights.length + 1][limit + 1];
         int boardedNumber = 0, boatsNumber = 0;
         sort(weights);
         Arrays.fill(boarded, false);
-        for (int i = 0; i < limit; i++) {
+        for (int i = 0; i <= limit; i++) {
             maxWeight[0][i] = 0;
+            board[0][i] = new ArrayList<>();
         }
         while (boardedNumber < weights.length) {
             for (int i = 0; i < weights.length; i++) {
-                for (int j = 1; j <= limit; j++) {
-                    if (weights[i] > j || boarded[i])
+                for (int j = 0; j <= limit; j++) {
+                    if (weights[i] > j || boarded[i]) {
                         maxWeight[i + 1][j] = maxWeight[i][j];
+                        board[i + 1][j] = board[i][j];
+                    }
                     else {
                         maxWeight[i + 1][j] = max(maxWeight[i][j], maxWeight[i][j - weights[i]] + weights[i]);
                         if ((maxWeight[i][j - weights[i]] + weights[i]) > maxWeight[i][j]) {
-                            boarded[i] = true;
-                            boardedNumber++;
+                            board[i + 1][j] = new ArrayList<Integer>();
+
+                            board[i + 1][j].addAll(board[i][j - weights[i]]);
+                            board[i + 1][j].add(i);
+                        }
+                        else {
+                            board[i + 1][j] = board[i][j];
                         }
                     }
                 }
             }
+            System.out.println("Boat");
+            for (int passenger : board[weights.length][limit]) {
+                boarded[passenger] = true;
+                System.out.println(passenger);
+            }
+            boardedNumber += board[weights.length][limit].size();
             boatsNumber++;
         }
         return boatsNumber;
@@ -90,7 +108,7 @@ public class Trip {
             System.out.println(ex.getMessage());
         }
 
-        result = calculateNumberOfBoatsCrude(weightLimit, weights);
+        result = calculateNumberOfBoats(weightLimit, weights);
 
         try(FileWriter output = new FileWriter("output.txt")) {
             output.write(String.valueOf(result));
