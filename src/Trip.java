@@ -8,23 +8,10 @@ import java.util.List;
 
 public class Trip {
 
-    public static void sort(int[] arr) {
-        int temp;
-        for (int i = 0; i < arr.length; i++) {
-            for (int j = i + 1; j < arr.length; j++) {
-                if (arr[i] > arr[j]) {
-                    temp = arr[i];
-                    arr[i] = arr[j];
-                    arr[j] = temp;
-                }
-            }
-        }
-    }
-
     public static int calculateNumberOfBoatsCrude(int limit, int[] weights) {
         boolean[] boarded = new boolean[weights.length];
         int filledWeight, boardedNumber = 0, boatsNumber = 0;
-        sort(weights);
+        Sorts.bubbleSortF(weights);
         Arrays.fill(boarded, false);
         while (boardedNumber < weights.length) {
             filledWeight = 0;
@@ -49,7 +36,7 @@ public class Trip {
         List<Integer>[][] board = new List[weights.length + 1][limit + 1];
         int[][] maxWeight = new int[weights.length + 1][limit + 1];
         int boardedNumber = 0, boatsNumber = 0;
-        sort(weights);
+        Sorts.bubbleSortF(weights);
         Arrays.fill(boarded, false);
         for (int i = 0; i <= limit; i++) {
             maxWeight[0][i] = 0;
@@ -90,7 +77,7 @@ public class Trip {
     public static int calculateNumberOfKayaks(int limit, int[] weights) {
         int numberOfKayaks = 0;
         boolean[] boarded = new boolean[weights.length];
-        sort(weights);
+        Sorts.bubbleSortF(weights);
         Arrays.fill(boarded, false);
         for (int i = weights.length - 1; i >= 0; i--) {
             if (boarded[i])
@@ -120,6 +107,14 @@ public class Trip {
         return numberOfKayaks;
     }
 
+    private static void writeResultToFile(int result, String fileName) {
+        try(FileWriter output = new FileWriter(fileName)) {
+            output.write(String.valueOf(result));
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         int numberOfPeople, weightLimit = 0, result;
         int[] weights = null;
@@ -142,10 +137,6 @@ public class Trip {
 
         result = calculateNumberOfKayaks2(weightLimit, weights);
 
-        try(FileWriter output = new FileWriter("output.txt")) {
-            output.write(String.valueOf(result));
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
+        writeResultToFile(result, "output.txt");
     }
 }
