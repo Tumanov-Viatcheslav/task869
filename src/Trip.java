@@ -109,6 +109,19 @@ public class Trip {
         return numberOfKayaks;
     }
 
+    public static int calculateNumberOfKayaks2(int limit, int[] weights) {
+        int numberOfKayaks = 0, lightIndex = 0;
+        boolean[] boarded = new boolean[weights.length];
+        Sorts.radixSortLSD(weights, 10);
+        Arrays.fill(boarded, false);
+        for (int i = weights.length - 1; i >= lightIndex; i--) {
+            if (weights[i] + weights[lightIndex] < limit)
+                lightIndex++;
+            numberOfKayaks++;
+        }
+        return numberOfKayaks;
+    }
+
     public static void main(String[] args) {
         int numberOfPeople, weightLimit = 0, result;
         int[] weights = null;
@@ -129,7 +142,7 @@ public class Trip {
             System.out.println(ex.getMessage());
         }
 
-        result = calculateNumberOfKayaks(weightLimit, weights);
+        result = calculateNumberOfKayaks2(weightLimit, weights);
 
         try(FileWriter output = new FileWriter("output.txt")) {
             output.write(String.valueOf(result));
