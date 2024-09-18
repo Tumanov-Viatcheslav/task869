@@ -100,7 +100,7 @@ public class Trip {
         int numberOfKayaks = 0, lightIndex = 0;
         Sorts.radixSortLSD(weights, 10);
         for (int i = weights.length - 1; i >= lightIndex; i--) {
-            if (weights[i] + weights[lightIndex] < limit)
+            if (weights[i] + weights[lightIndex] <= limit)
                 lightIndex++;
             numberOfKayaks++;
         }
