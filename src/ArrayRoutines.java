@@ -16,8 +16,8 @@ public class ArrayRoutines {
 
     public static void printArray(int[] mas) {
         System.out.print("массив: ");
-        for (int i = 0; i < mas.length; i++) {
-            System.out.print(" " + mas[i]);
+        for (int ma : mas) {
+            System.out.print(" " + ma);
         }
         System.out.println();
     }
@@ -76,10 +76,10 @@ public class ArrayRoutines {
     }
 
     public static double avg(int[] mas) {
-        double av = 0;
+        double av;
         int sum = 0;
-        for (int i = 0; i < mas.length; i++) {
-            sum += mas[i];
+        for (int ma : mas) {
+            sum += ma;
         }
         av = ((double) sum) / mas.length;
         return av;

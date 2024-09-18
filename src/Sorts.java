@@ -16,9 +16,9 @@ public class Sorts {
                     singleDigits[i] = new Pair(0, i);
             }
             Arrays.fill(indexesInBuckets, 0);
-            for (int i = 0; i < singleDigits.length; i++) {
-                bucket[singleDigits[i].x1][indexesInBuckets[singleDigits[i].x1]] = singleDigits[i].x2;
-                indexesInBuckets[singleDigits[i].x1]++;
+            for (Pair singleDigit : singleDigits) {
+                bucket[singleDigit.x1][indexesInBuckets[singleDigit.x1]] = singleDigit.x2;
+                indexesInBuckets[singleDigit.x1]++;
             }
             indexTmp = 0;
             for (int i = 0; i < indexesInBuckets.length; i++) {
@@ -27,9 +27,7 @@ public class Sorts {
                     indexTmp++;
                 }
             }
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] = tmpArr[i];
-            }
+            System.arraycopy(tmpArr, 0, arr, 0, arr.length);
             mask *= radix;
         }
     }
