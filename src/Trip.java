@@ -107,6 +107,28 @@ public class Trip {
         return numberOfKayaks;
     }
 
+    private static void readDataFromFile(TripInputData data) {
+        data.weightLimit = 0;
+        data.weights = null;
+        try(BufferedReader input = new BufferedReader(new FileReader("input.txt"))) {
+            int numberOfPeople;
+            String line;
+            String[] dividedLine;
+            line = input.readLine();
+            dividedLine = line.split(" ");
+            numberOfPeople = Integer.parseInt(dividedLine[0]);
+            data.weightLimit = Integer.parseInt(dividedLine[1]);
+            data.weights = new int[numberOfPeople];
+            line = input.readLine();
+            dividedLine = line.split(" ");
+            for (int i = 0; i < numberOfPeople; i++) {
+                data.weights[i] = Integer.parseInt(dividedLine[i]);
+            }
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
     private static void writeResultToFile(int result, String fileName) {
         try(FileWriter output = new FileWriter(fileName)) {
             output.write(String.valueOf(result));
@@ -116,27 +138,18 @@ public class Trip {
     }
 
     public static void main(String[] args) {
-        int numberOfPeople, weightLimit = 0, result;
-        int[] weights = null;
-        try(BufferedReader input = new BufferedReader(new FileReader("input.txt"))) {
-            String line;
-            String[] dividedLine;
-            line = input.readLine();
-            dividedLine = line.split(" ");
-            numberOfPeople = Integer.parseInt(dividedLine[0]);
-            weightLimit = Integer.parseInt(dividedLine[1]);
-            weights = new int[numberOfPeople];
-            line = input.readLine();
-            dividedLine = line.split(" ");
-            for (int i = 0; i < numberOfPeople; i++) {
-                weights[i] = Integer.parseInt(dividedLine[i]);
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
+        TripInputData data = new TripInputData();
+        int result;
 
-        result = calculateNumberOfKayaks2(weightLimit, weights);
+        readDataFromFile(data);
+
+        result = calculateNumberOfKayaks2(data.weightLimit, data.weights);
 
         writeResultToFile(result, "output.txt");
     }
+}
+
+class TripInputData {
+    int weightLimit;
+    int[] weights;
 }
