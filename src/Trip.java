@@ -83,7 +83,7 @@ public class Trip {
             if (boarded[i])
                 continue;
             for (int j = i - 1; j >= 0; j--) {
-                if (!boarded[j] && (weights[i] + weights[j] < limit)) {
+                if (!boarded[j] && (weights[i] + weights[j] <= limit)) {
                     boarded[i] = true;
                     boarded[j] = true;
                     numberOfKayaks++;
